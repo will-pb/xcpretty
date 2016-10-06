@@ -21,12 +21,14 @@ module XCPretty
     end
 
     def self.highlight_with_formatter(snippet, formatter)
-      if snippet.file_path.include?(':')
+      if not snippet.file_path.nil? and snippet.file_path.include?(':')
         filename = snippet.file_path.rpartition(':').first
       else
         filename = snippet.file_path
       end
-
+      unless filename
+        return snippet.contents
+      end
       lexer = find_lexer(filename, snippet.contents)
       if lexer
         formatter.format(lexer.lex(snippet.contents))
